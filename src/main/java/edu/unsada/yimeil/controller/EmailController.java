@@ -31,11 +31,26 @@ public class EmailController {
             return new ResponseEntity<>(new Response(false, "Información del remitente o destinatario no proporcionada."), HttpStatus.BAD_REQUEST);
         }
 
+        try {
+            // Aquí iría la lógica para enviar el correo utilizando la API de Yimeil
+            boolean emailSent = enviarCorreo(emailRequest); // Lógica para enviar el correo
 
-        // Aquí iría la lógica para enviar el correo utilizando la API de Yimeil
-
-        return new ResponseEntity<>(new Response(true, "Correo enviado exitosamente."), HttpStatus.CREATED);
+            if (emailSent) {
+                return new ResponseEntity<>(new Response(true, "Correo enviado exitosamente."), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(new Response(false, "Error al enviar el correo."), HttpStatus.FORBIDDEN);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response(false, "Error al enviar el correo: " + e.getMessage()), HttpStatus.FORBIDDEN);
+        }
     }
+
+    private boolean enviarCorreo(EmailRequestDTO emailRequest) {
+        // Simulación de la lógica para enviar un correo
+        // Deberías reemplazar esto con la implementación real
+        return true; // Devuelve true si el correo se envía exitosamente
+    }
+
 
     // Endpoint para obtener la lista de correos recibidos
     @GetMapping
@@ -63,21 +78,24 @@ public class EmailController {
         );
         return new ResponseEntity<>(Arrays.asList(emailResponse), HttpStatus.OK);
     }
+
     @GetMapping("/{emailId}")
     public ResponseEntity<CorreoResponse> getEmailDetails(@PathVariable("emailId") int emailId, @RequestHeader("token") String token, @RequestHeader("systemId") String systemId) {
+        // Verificar si el token o el systemId están vacíos o nulos
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 401 Unauthorized
         }
 
-        Correo emailDetails = new Correo(
-                emailId, "Asunto del correo", "Cuerpo del correo",
-                new Timestamp(System.currentTimeMillis()), "userId",
-                Arrays.asList(new Attachments(1, "archivo.txt", "http://url.al.archivo", emailId, null)),
-                Arrays.asList(new DestinatariosFrom(1, "dest@example.com", emailId, null))
-        );
-        emailDetails.setFrom("remitente@example.com");
-        emailDetails.setTo(Arrays.asList("dest1@example.com", "dest2@example.com"));
+        // Simulación de la lógica para obtener los detalles del correo
+        // En una aplicación real, esto debería obtener los datos de la base de datos
+        Correo emailDetails = obtenerCorreoPorId(emailId);
 
+        // Verificar si el correo no existe
+        if (emailDetails == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 Bad Request
+        }
+
+        // Crear la respuesta con los detalles del correo
         CorreoResponse emailResponse = new CorreoResponse(
                 emailDetails.getEmailId(),
                 emailDetails.getTo(),
@@ -90,6 +108,20 @@ public class EmailController {
                 emailDetails.getReceivedAt().toString()
         );
 
-        return new ResponseEntity<>(emailResponse, HttpStatus.OK);
+        return new ResponseEntity<>(emailResponse, HttpStatus.OK); // 200 OK
+    }
+
+    private Correo obtenerCorreoPorId(int emailId) {
+        // Simulación de la lógica para obtener un correo por su ID
+        // Deberías reemplazar esto con la implementación real
+        if (emailId == 1) {
+            return new Correo(
+                    emailId, "Asunto del correo", "Cuerpo del correo",
+                    new Timestamp(System.currentTimeMillis()), "userId",
+                    Arrays.asList(new Attachments(1, "archivo.txt", "http://url.al.archivo", emailId, null)),
+                    Arrays.asList(new DestinatariosFrom(1, "dest@example.com", emailId, null))
+            );
+        }
+        return null; // Simula un correo no existente para otros ID
     }
 }
