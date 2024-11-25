@@ -1,0 +1,47 @@
+package edu.unsada.yimeil.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import com.zaxxer.hikari.HikariDataSource;
+
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
+public class JpaConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+                .type(HikariDataSource.class)
+                .url("jdbc:mysql://localhost:3306/yimeil")
+                .username("root")
+                .password("12345678")
+                .driverClassName("com.mysql.cj.jdbc.Driver")
+                .build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPackagesToScan(new String[] { "edu.unsada.yimeil.models" });
+
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(additionalProperties());
+
+        return em;
+    }
+
+    private Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+
+        return properties;
+    }
+}
