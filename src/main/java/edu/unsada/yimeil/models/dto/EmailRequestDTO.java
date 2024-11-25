@@ -9,12 +9,12 @@ public class EmailRequestDTO {
     private List<String> to;      // Lista de destinatarios.
     private String subject;       // Asunto del correo, opcional.
     private String body;          // Cuerpo del correo, opcional.
-    private List<AttachmentDTO> attachments; // Nombre y URLs de los archivos subidos a Draiv, opcional.
+    private List<AttachmentResponse> attachments; // Nombre y URLs de los archivos subidos a Draiv, opcional.
 
     // Constructor
     public EmailRequestDTO() {}
 
-    public EmailRequestDTO(String token, String systemId, String from, List<String> to, String subject, String body, List<AttachmentDTO> attachments) {
+    public EmailRequestDTO(String token, String systemId, String from, List<String> to, String subject, String body, List<AttachmentResponse> attachments) {
         this.token = token;
         this.systemId = systemId;
         this.from = from;
@@ -73,11 +73,11 @@ public class EmailRequestDTO {
         this.body = body;
     }
 
-    public List<AttachmentDTO> getAttachments() {
+    public List<AttachmentResponse> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<AttachmentDTO> attachments) {
+    public void setAttachments(List<AttachmentResponse> attachments) {
         this.attachments = attachments;
     }
 }
