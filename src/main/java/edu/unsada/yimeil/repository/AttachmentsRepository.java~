@@ -38,7 +38,7 @@ public class AttachmentsRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AttachmentsRowMapper());
     }
 
-    // Este es el método que debes asegurarte de tener definido correctamente
+
     public List<Attachments> findByCorreoEmailId(int correoEmailId) {
         String sql = "SELECT * FROM Attachments WHERE correo_emailId = ?";
         return jdbcTemplate.query(sql, new Object[]{correoEmailId}, new AttachmentsRowMapper());

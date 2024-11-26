@@ -22,40 +22,38 @@ public class DestinatariosFromRepository {
             DestinatariosFrom destinatariosFrom = new DestinatariosFrom();
             destinatariosFrom.setIdfrom(rs.getInt("idfrom"));
             destinatariosFrom.setEmail(rs.getString("email"));
-            destinatariosFrom.setCorreoEmailId(rs.getInt("correo_emailId"));
+            destinatariosFrom.setCorreoEmailId(rs.getInt("correo_emailid")); // en minúscula
             return destinatariosFrom;
         }
     }
 
     public List<DestinatariosFrom> findAll() {
-        String sql = "SELECT * FROM destinatarios_from";
+        String sql = "SELECT * FROM `from`";
         return jdbcTemplate.query(sql, new DestinatariosFromRowMapper());
     }
 
     public DestinatariosFrom findById(int id) {
-        String sql = "SELECT * FROM destinatarios_from WHERE idfrom = ?";
+        String sql = "SELECT * FROM `from` WHERE idfrom = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new DestinatariosFromRowMapper());
     }
 
-    // Asegúrate de que los nombres de las columnas sean correctos
-    public List<DestinatariosFrom> findByCorreoEmailId(int correoEmailId) {
-        String sql = "SELECT * FROM destinatarios_from WHERE correo_emailId = ?";
+    public List<DestinatariosFrom> findByCorreoEmailId(int correoEmailId) { // en minúscula
+        String sql = "SELECT * FROM `from` WHERE correo_emailid = ?"; // en minúscula
         return jdbcTemplate.query(sql, new Object[]{correoEmailId}, new DestinatariosFromRowMapper());
     }
 
-    // Ajuste del método save para evitar errores de sintaxis SQL
     public int save(DestinatariosFrom destinatariosFrom) {
-        String sql = "INSERT INTO destinatarios_from (email, correo_emailId) VALUES (?, ?)";
+        String sql = "INSERT INTO `from` (email, correo_emailid) VALUES (?, ?)"; // en minúscula
         return jdbcTemplate.update(sql, destinatariosFrom.getEmail(), destinatariosFrom.getCorreoEmailId());
     }
 
     public int update(DestinatariosFrom destinatariosFrom) {
-        String sql = "UPDATE destinatarios_from SET email = ?, correo_emailId = ? WHERE idfrom = ?";
+        String sql = "UPDATE `from` SET email = ?, correo_emailid = ? WHERE idfrom = ?"; // en minúscula
         return jdbcTemplate.update(sql, destinatariosFrom.getEmail(), destinatariosFrom.getCorreoEmailId(), destinatariosFrom.getIdfrom());
     }
 
     public int deleteById(int id) {
-        String sql = "DELETE FROM destinatarios_from WHERE idfrom = ?";
+        String sql = "DELETE FROM `from` WHERE idfrom = ?";
         return jdbcTemplate.update(sql, id);
     }
 }

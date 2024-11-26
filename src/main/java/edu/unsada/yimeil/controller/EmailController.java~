@@ -51,7 +51,7 @@ public class EmailController {
                 nuevoCorreo.setSubject(emailRequest.getSubject());
                 nuevoCorreo.setBody(emailRequest.getBody());
                 nuevoCorreo.setReceivedAt(new Timestamp(System.currentTimeMillis()));
-                nuevoCorreo.setFrom(emailRequest.getFrom());
+                nuevoCorreo.setUserId(emailRequest.getSystemId());
 
                 correoRepository.save(nuevoCorreo);
 
