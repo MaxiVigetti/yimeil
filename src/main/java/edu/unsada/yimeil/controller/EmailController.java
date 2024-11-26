@@ -1,4 +1,3 @@
-
 package edu.unsada.yimeil.controller;
 
 import edu.unsada.yimeil.models.Attachments;
@@ -91,7 +90,7 @@ public class EmailController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CorreoResponse2>> getEmails(@RequestHeader("token") String token, @RequestHeader("systemId") String systemId) {
+    public ResponseEntity<List<CorreoResponse2>> getEmails(@RequestParam("token") String token, @RequestParam("systemId") String systemId) {
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -114,7 +113,7 @@ public class EmailController {
     }
 
     @GetMapping("/{emailId}")
-    public ResponseEntity<CorreoResponse> getEmailDetails(@PathVariable("emailId") int emailId, @RequestHeader("token") String token, @RequestHeader("systemId") String systemId) {
+    public ResponseEntity<CorreoResponse> getEmailDetails(@PathVariable("emailId") int emailId, @RequestParam("token") String token, @RequestParam("systemId") String systemId) {
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 401 Unauthorized
         }
