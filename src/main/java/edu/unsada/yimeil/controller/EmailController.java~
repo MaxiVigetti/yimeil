@@ -131,7 +131,7 @@ public class EmailController {
         CorreoResponse emailResponse = new CorreoResponse(
                 emailDetails.getEmailId(),
                 destinatarios.stream().map(DestinatariosFrom::getEmail).collect(Collectors.toList()),
-                emailDetails.getFrom(), //
+                emailDetails.getFrom(), // Ajustar para obtener el remitente real
                 emailDetails.getSubject(),
                 emailDetails.getBody(),
                 attachments.stream().map(att -> new AttachmentResponse(att.getFilename(), att.getUrl())).collect(Collectors.toList()),

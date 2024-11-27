@@ -31,6 +31,7 @@ public class CorreoRepository {
             correo.setSubject(rs.getString("subject"));
             correo.setBody(rs.getString("body"));
             correo.setReceivedAt(rs.getTimestamp("receivedAt"));
+            correo.setFrom(rs.getString("from")); // Campo "from"
             correo.setUserId(rs.getString("userId"));
             return correo;
         }
@@ -47,7 +48,7 @@ public class CorreoRepository {
     }
 
     public int save(Correo correo) {
-        String sql = "INSERT INTO correo (subject, body, receivedAt, userId) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO correo (subject, body, receivedAt, `from`, userId) VALUES (?, ?, ?, ?, ?)"; // Campo "from"
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -58,7 +59,8 @@ public class CorreoRepository {
                 ps.setString(1, correo.getSubject());
                 ps.setString(2, correo.getBody());
                 ps.setTimestamp(3, correo.getReceivedAt());
-                ps.setString(4, correo.getUserId());
+                ps.setString(4, correo.getFrom()); // Campo "from"
+                ps.setString(5, correo.getUserId());
                 return ps;
             }
         }, keyHolder);
@@ -70,8 +72,8 @@ public class CorreoRepository {
     }
 
     public int update(Correo correo) {
-        String sql = "UPDATE correo SET subject = ?, body = ?, receivedAt = ?, userId = ? WHERE emailId = ?";
-        return jdbcTemplate.update(sql, correo.getSubject(), correo.getBody(), correo.getReceivedAt(), correo.getUserId(), correo.getEmailId());
+        String sql = "UPDATE correo SET subject = ?, body = ?, receivedAt = ?, `from` = ?, userId = ? WHERE emailId = ?"; // Campo "from"
+        return jdbcTemplate.update(sql, correo.getSubject(), correo.getBody(), correo.getReceivedAt(), correo.getFrom(), correo.getUserId(), correo.getEmailId());
     }
 
     public int deleteById(int emailId) {
