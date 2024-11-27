@@ -1,4 +1,3 @@
-
 package edu.unsada.yimeil.models.dto;
 
 import java.util.List;
@@ -12,8 +11,8 @@ public class CorreoResponse {
     private List<AttachmentResponse> attachments;
     private String receivedAt;
 
-    public CorreoResponse(int emailId, List<String> to, String from, String subject, String body, List<AttachmentResponse> attachments, String receivedAt) {
-        this.emailId = emailId;
+    public CorreoResponse(long emailId, List<String> to, String from, String subject, String body, List<AttachmentResponse> attachments, String receivedAt) {
+        this.emailId = (int) emailId;
         this.to = to;
         this.from = from;
         this.subject = subject;

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/emails")
+@RequestMapping("/yimeil/emails")  // Ajustar la URL base
 public class EmailController {
 
     @Autowired
@@ -131,7 +131,7 @@ public class EmailController {
         CorreoResponse emailResponse = new CorreoResponse(
                 emailDetails.getEmailId(),
                 destinatarios.stream().map(DestinatariosFrom::getEmail).collect(Collectors.toList()),
-                emailDetails.getFrom(), //
+                emailDetails.getFrom(),
                 emailDetails.getSubject(),
                 emailDetails.getBody(),
                 attachments.stream().map(att -> new AttachmentResponse(att.getFilename(), att.getUrl())).collect(Collectors.toList()),
