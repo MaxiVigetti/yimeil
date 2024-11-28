@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/emails")
 public class EmailController {
@@ -30,6 +31,7 @@ public class EmailController {
     @Autowired
     private DestinatariosFromRepository destinatariosFromRepository;
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Response> sendEmail(@RequestBody EmailRequestDTO emailRequest) {
         if (emailRequest.getToken() == null || emailRequest.getToken().isEmpty() ||
@@ -89,7 +91,7 @@ public class EmailController {
         // Deberías reemplazar esto con la implementación real
         return true; // Devuelve true si el correo se envía exitosamente
     }
-
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<CorreoResponse2>> getEmails(@RequestParam("token") String token, @RequestParam("systemId") String systemId) {
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
@@ -112,7 +114,7 @@ public class EmailController {
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
-
+    @CrossOrigin
     @GetMapping("/{emailId}")
     public ResponseEntity<CorreoResponse> getEmailDetails(@PathVariable("emailId") int emailId, @RequestParam("token") String token, @RequestParam("systemId") String systemId) {
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
