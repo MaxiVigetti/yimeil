@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/emails")
 public class EmailController {
@@ -30,6 +31,7 @@ public class EmailController {
     @Autowired
     private DestinatariosFromRepository destinatariosFromRepository;
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Response> sendEmail(@RequestBody EmailRequestDTO emailRequest) {
         if (emailRequest.getToken() == null || emailRequest.getToken().isEmpty() ||
@@ -89,7 +91,7 @@ public class EmailController {
         // Deberías reemplazar esto con la implementación real
         return true; // Devuelve true si el correo se envía exitosamente
     }
-
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<CorreoResponse2>> getEmails(@RequestParam("token") String token, @RequestParam("systemId") String systemId) {
         if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
@@ -112,32 +114,44 @@ public class EmailController {
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
-
+    @CrossOrigin
     @GetMapping("/{emailId}")
-    public ResponseEntity<CorreoResponse> getEmailDetails(@PathVariable("emailId") int emailId, @RequestParam("token") String token, @RequestParam("systemId") String systemId) {
-        if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 401 Unauthorized
+        public ResponseEntity<CorreoResponse> getEmailDetails(
+                @PathVariable("emailId") int emailId,
+                @RequestParam("token") String token,
+                @RequestParam("systemId") String systemId) {
+
+            if (token == null || token.isEmpty() || systemId == null || systemId.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 401 Unauthorized
+            }
+
+            Correo emailDetails = correoRepository.findById(emailId);
+
+            if (emailDetails == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
+            }
+
+            List<DestinatariosFrom> destinatarios = destinatariosFromRepository.findByCorreoEmailId(emailId);
+            List<Attachments> attachments = attachmentsRepository.findByCorreoEmailId(emailId);
+
+            CorreoResponse emailResponse = new CorreoResponse(
+                    emailDetails.getEmailId(),
+                    destinatarios.stream().map(DestinatariosFrom::getEmail).collect(Collectors.toList()),
+                    emailDetails.getFrom(),
+                    emailDetails.getSubject(),
+                    emailDetails.getBody(),
+                    attachments.stream().map(att -> new AttachmentResponse(att.getFilename(), att.getUrl())).collect(Collectors.toList()),
+                    emailDetails.getReceivedAt().toString()
+            );
+
+            return new ResponseEntity<>(emailResponse, HttpStatus.OK); // 200 OK
         }
 
-        Correo emailDetails = correoRepository.findById(emailId);
-
-        if (emailDetails == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
+        @DeleteMapping("{emailId}")
+        public ResponseEntity<Void> deleteEmail(@PathVariable int emailId) {
+            correoRepository.deleteById(emailId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        List<DestinatariosFrom> destinatarios = destinatariosFromRepository.findByCorreoEmailId(emailId);
-        List<Attachments> attachments = attachmentsRepository.findByCorreoEmailId(emailId);
-
-        CorreoResponse emailResponse = new CorreoResponse(
-                emailDetails.getEmailId(),
-                destinatarios.stream().map(DestinatariosFrom::getEmail).collect(Collectors.toList()),
-                emailDetails.getFrom(), //
-                emailDetails.getSubject(),
-                emailDetails.getBody(),
-                attachments.stream().map(att -> new AttachmentResponse(att.getFilename(), att.getUrl())).collect(Collectors.toList()),
-                emailDetails.getReceivedAt().toString()
-        );
-
-        return new ResponseEntity<>(emailResponse, HttpStatus.OK); // 200 OK
     }
-}
+
+

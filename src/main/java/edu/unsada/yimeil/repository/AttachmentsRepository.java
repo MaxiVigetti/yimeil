@@ -30,33 +30,33 @@ public class AttachmentsRepository {
     }
 
     public List<Attachments> findAll() {
-        String sql = "SELECT * FROM Attachments";
+        String sql = "SELECT * FROM attachments";
         return jdbcTemplate.query(sql, new AttachmentsRowMapper());
     }
 
     public Attachments findById(int id) {
-        String sql = "SELECT * FROM Attachments WHERE idattachments = ?";
+        String sql = "SELECT * FROM attachments WHERE idattachments = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AttachmentsRowMapper());
     }
 
 
     public List<Attachments> findByCorreoEmailId(int correoEmailId) {
-        String sql = "SELECT * FROM Attachments WHERE correo_emailId = ?";
+        String sql = "SELECT * FROM attachments WHERE correo_emailId = ?";
         return jdbcTemplate.query(sql, new Object[]{correoEmailId}, new AttachmentsRowMapper());
     }
 
     public int save(Attachments attachment) {
-        String sql = "INSERT INTO Attachments (filename, url, correo_emailId) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO attachments (filename, url, correo_emailId) VALUES (?, ?, ?)";
         return jdbcTemplate.update(sql, attachment.getFilename(), attachment.getUrl(), attachment.getCorreoEmailId());
     }
 
     public int update(Attachments attachment) {
-        String sql = "UPDATE Attachments SET filename = ?, url = ?, correo_emailId = ? WHERE idattachments = ?";
+        String sql = "UPDATE attachments SET filename = ?, url = ?, correo_emailId = ? WHERE idattachments = ?";
         return jdbcTemplate.update(sql, attachment.getFilename(), attachment.getUrl(), attachment.getCorreoEmailId(), attachment.getIdattachments());
     }
 
     public int deleteById(int id) {
-        String sql = "DELETE FROM Attachments WHERE idattachments = ?";
+        String sql = "DELETE FROM attachments WHERE idattachments = ?";
         return jdbcTemplate.update(sql, id);
     }
 }
