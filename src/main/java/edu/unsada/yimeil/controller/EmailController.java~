@@ -151,17 +151,13 @@ public class EmailController {
 
     @DeleteMapping("/{emailId}")
     public ResponseEntity<Void> deleteEmail(@PathVariable int emailId) {
-        // Primero eliminar los destinatarios asociados
-        destinatariosFromRepository.deleteByCorreoEmailId(emailId);
-
-        // Luego eliminar los adjuntos asociados
+        // Primero eliminar los adjuntos asociados
         attachmentsRepository.deleteByCorreoEmailId(emailId);
 
-        // Finalmente, eliminar el correo
+        // Luego eliminar el correo
         correoRepository.deleteById(emailId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
 }
 

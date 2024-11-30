@@ -1,3 +1,4 @@
+
 package edu.unsada.yimeil.repository;
 
 import edu.unsada.yimeil.models.DestinatariosFrom;
@@ -22,7 +23,7 @@ public class DestinatariosFromRepository {
             DestinatariosFrom destinatariosFrom = new DestinatariosFrom();
             destinatariosFrom.setIdfrom(rs.getInt("idfrom"));
             destinatariosFrom.setEmail(rs.getString("email"));
-            destinatariosFrom.setCorreoEmailId(rs.getInt("correo_emailid")); // en minúscula
+            destinatariosFrom.setCorreoEmailId(rs.getInt("correo_emailId"));
             return destinatariosFrom;
         }
     }
@@ -37,18 +38,19 @@ public class DestinatariosFromRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new DestinatariosFromRowMapper());
     }
 
-    public List<DestinatariosFrom> findByCorreoEmailId(int correoEmailId) { // en minúscula
-        String sql = "SELECT * FROM `from` WHERE correo_emailid = ?"; // en minúscula
+    // Método para encontrar destinatarios por correo_emailId
+    public List<DestinatariosFrom> findByCorreoEmailId(int correoEmailId) {
+        String sql = "SELECT * FROM `from` WHERE correo_emailId = ?";
         return jdbcTemplate.query(sql, new Object[]{correoEmailId}, new DestinatariosFromRowMapper());
     }
 
     public int save(DestinatariosFrom destinatariosFrom) {
-        String sql = "INSERT INTO `from` (email, correo_emailid) VALUES (?, ?)"; // en minúscula
+        String sql = "INSERT INTO `from` (email, correo_emailId) VALUES (?, ?)";
         return jdbcTemplate.update(sql, destinatariosFrom.getEmail(), destinatariosFrom.getCorreoEmailId());
     }
 
     public int update(DestinatariosFrom destinatariosFrom) {
-        String sql = "UPDATE `from` SET email = ?, correo_emailid = ? WHERE idfrom = ?"; // en minúscula
+        String sql = "UPDATE `from` SET email = ?, correo_emailId = ? WHERE idfrom = ?";
         return jdbcTemplate.update(sql, destinatariosFrom.getEmail(), destinatariosFrom.getCorreoEmailId(), destinatariosFrom.getIdfrom());
     }
 

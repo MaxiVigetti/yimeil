@@ -1,3 +1,4 @@
+
 package edu.unsada.yimeil.repository;
 
 import edu.unsada.yimeil.models.Attachments;
@@ -17,14 +18,6 @@ public class AttachmentsRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void deleteAll(List<Attachments> attachments) {
-        for (Attachments attachment : attachments) {
-            deleteById(attachment.getIdattachments());
-        }
-    }
-
-    public void deleteByCorreoEmailId(int correoEmailId) {
-        String sql = "DELETE FROM attachments WHERE correo_emailId = ?";
-        jdbcTemplate.update(sql, correoEmailId);
     }
 
     private static class AttachmentsRowMapper implements RowMapper<Attachments> {
@@ -48,6 +41,7 @@ public class AttachmentsRepository {
         String sql = "SELECT * FROM attachments WHERE idattachments = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AttachmentsRowMapper());
     }
+
 
     public List<Attachments> findByCorreoEmailId(int correoEmailId) {
         String sql = "SELECT * FROM attachments WHERE correo_emailId = ?";

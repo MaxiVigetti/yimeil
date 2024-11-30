@@ -1,4 +1,3 @@
-
 package edu.unsada.yimeil.repository;
 
 import edu.unsada.yimeil.models.DestinatariosFrom;
@@ -57,5 +56,11 @@ public class DestinatariosFromRepository {
     public int deleteById(int id) {
         String sql = "DELETE FROM `from` WHERE idfrom = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    // Método para eliminar destinatarios por correo_emailId
+    public void deleteByCorreoEmailId(int correoEmailId) {
+        String sql = "DELETE FROM `from` WHERE correo_emailId = ?";
+        jdbcTemplate.update(sql, correoEmailId);
     }
 }
